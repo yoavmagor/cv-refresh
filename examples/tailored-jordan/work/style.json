@@ -1,0 +1,31 @@
+{
+  "page_size": "a4",
+  "margins_in": {
+    "left": 0.75,
+    "right": 0.75,
+    "top": 0.8,
+    "bottom": 0.7
+  },
+  "font_body": "Cambria",
+  "font_heading": "Cambria",
+  "size_body": 10.5,
+  "size_name": 22.0,
+  "size_heading": 11.5,
+  "accent_color": "1B6F72",
+  "heading_color": "1B6F72",
+  "heading_case": "upper",
+  "heading_bold": true,
+  "heading_rule": false,
+  "header_alignment": "center",
+  "section_order": [
+    "summary",
+    "experience",
+    "skills",
+    "education",
+    "military",
+    "languages"
+  ],
+  "columns": 1,
+  "notes": [],
+  "source_file": "evals/fixtures/sample-cv-2022.pdf"
+}

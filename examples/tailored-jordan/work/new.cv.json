@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "target": {
+      "type": "posting",
+      "title": "Senior Data Engineer, Data Platform",
+      "company": "Tessellate Mobility"
+    },
+    "section_order": [
+      "summary",
+      "experience",
+      "skills",
+      "education",
+      "military",
+      "languages"
+    ]
+  },
+  "basics": {
+    "name": "Jordan Avery",
+    "headline": "Data Engineering Team Lead · Lakehouse, Streaming & Analytics Engineering",
+    "location": "Tel Aviv, Israel",
+    "email": "jordan.avery@example.com",
+    "links": [
+      {
+        "label": "LinkedIn",
+        "url": "https://linkedin.com/in/jordan-avery-example",
+        "display": "linkedin.com/in/jordan-avery-example"
+      }
+    ]
+  },
+  "summary": [
+    "Data engineering team lead who builds and runs data platforms end to end: a Databricks lakehouse, batch and streaming pipelines in Python, Spark and SQL, and dbt modeling with tests and data contracts. 10 years in data across logistics, retail and healthcare.",
+    "Currently leads a team of 4 data engineers at Harborlight Logistics, a freight-visibility SaaS, where the new lakehouse cut monthly warehouse cost by about 35%. Looking for a senior data platform role."
+  ],
+  "experience": [
+    {
+      "company": "Harborlight Logistics",
+      "company_blurb": "B2B SaaS for freight visibility used by shippers and carriers",
+      "positions": [
+        {
+          "title": "Data Engineering Team Lead",
+          "start": "2024-01",
+          "end": "present"
+        },
+        {
+          "title": "Senior Data Engineer",
+          "start": "2022-04",
+          "end": "2023-12"
+        }
+      ],
+      "bullets": [
+        "Lead a team of 4 data engineers that owns the data platform: carrier GPS/telematics and shipment-event ingestion, the lakehouse, dbt models and internal analytics",
+        "Built the lakehouse on Databricks and Delta Lake, replacing Redshift and migrating 30 pipelines, which cut monthly warehouse cost by about 35%",
+        "Built a near-real-time ETA events pipeline with Kinesis and Spark Structured Streaming, reducing latency from about 1 hour (batch) to under 5 minutes",
+        "Introduced dbt with tests and set up data contracts with the backend team so schema changes stop breaking pipelines",
+        "Work closely with data science, product and backend teams; write design docs and take part in the on-call rotation",
+        "Interviewed and hired 2 engineers; mentor 2 junior engineers"
+      ],
+      "tech": [
+        "Python",
+        "SQL",
+        "PySpark",
+        "Databricks",
+        "Delta Lake",
+        "dbt",
+        "Airflow (MWAA)",
+        "AWS (S3, Kinesis, Lambda, Glue)",
+        "Terraform",
+        "GitHub Actions",
+        "Docker"
+      ]
+    },
+    {
+      "company": "Quillstone Retail",
+      "title": "Data Engineer",
+      "start": "2019-01",
+      "end": "2022-03",
+      "bullets": [
+        "Built and maintained 40+ Airflow DAGs ingesting POS and e-commerce data into Amazon Redshift",
+        "Processed clickstream data with Apache Spark on Amazon EMR for about a year",
+        "Designed a dimensional data model for sales reporting, used by 120 analysts across 3 countries",
+        "Migrated legacy SSIS jobs to Python, reducing nightly load time from 5 hours to 2 hours",
+        "Optimized Redshift distribution and sort keys, cutting dashboard query times by 60%",
+        "Contributed to data quality checks with Great Expectations"
+      ]
+    },
+    {
+      "company": "Pinecrest Health Analytics",
+      "title": "BI Developer",
+      "start": "2016-08",
+      "end": "2018-12",
+      "bullets": [
+        "Developed Tableau dashboards for hospital operations teams and monthly reporting for 14 client hospitals",
+        "Wrote complex SQL for claims analysis in SQL Server"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "group": "Languages",
+      "items": [
+        "Python",
+        "SQL",
+        "Bash"
+      ]
+    },
+    {
+      "group": "Data platform",
+      "items": [
+        "Databricks",
+        "Delta Lake",
+        "Apache Spark (PySpark, Structured Streaming)",
+        "dbt",
+        "Airflow (MWAA)",
+        "Amazon Redshift"
+      ]
+    },
+    {
+      "group": "Cloud & DevOps",
+      "items": [
+        "AWS (S3, Kinesis, Lambda, Glue, EMR)",
+        "Terraform",
+        "GitHub Actions",
+        "Docker"
+      ]
+    },
+    {
+      "group": "Modeling & quality",
+      "items": [
+        "dimensional data modeling",
+        "dbt tests",
+        "Great Expectations",
+        "data contracts"
+      ]
+    },
+    {
+      "group": "BI",
+      "items": [
+        "Tableau"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Ben-Gurion University of the Negev",
+      "degree": "B.Sc.",
+      "field": "Industrial Engineering and Management",
+      "start": "2012",
+      "end": "2016"
+    }
+  ],
+  "languages": [
+    {
+      "language": "Hebrew",
+      "level": "Native"
+    },
+    {
+      "language": "English",
+      "level": "Fluent"
+    }
+  ],
+  "extra_sections": [
+    {
+      "key": "military",
+      "title": "Military Service",
+      "items": [
+        {
+          "title": "Operations Analyst",
+          "company": "IDF",
+          "start": "2009",
+          "end": "2012"
+        }
+      ]
+    }
+  ]
+}

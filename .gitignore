@@ -1,0 +1,16 @@
+# Personal data: settings, session history and scratch files. Never commit.
+skills/cv-refresh/user-data/
+user-data/
+cv-refresh-user-data*.zip
+
+# Build output
+dist/
+
+# Local test runs (examples/ holds the curated, fictional reference runs)
+evals/workspace/
+
+# Python / OS
+__pycache__/
+*.pyc
+.DS_Store
+.venv/

@@ -1,0 +1,37 @@
+{
+  "title": "Senior Data Engineer, Data Platform",
+  "company": "Tessellate Mobility",
+  "location": "Tel Aviv, Israel (Hybrid)",
+  "url": "(pasted text)",
+  "seniority": "senior",
+  "domain": "last-mile delivery routing and fleet-optimization software",
+  "responsibilities": [
+    "Design, build and own the lakehouse platform and its batch and streaming pipelines",
+    "Partner with data science, product and backend teams on data models and data contracts",
+    "Set standards for data quality, testing and observability",
+    "Mentor engineers and help grow the data platform team"
+  ],
+  "must_have": ["5+ years building production data pipelines", "Strong Python and SQL", "Apache Spark",
+                "Airflow or similar orchestrator", "dbt", "AWS", "Data modeling (dimensional / data vault)",
+                "Streaming data (Kafka, Kinesis or similar)"],
+  "nice_to_have": ["Terraform / IaC", "Kubernetes", "Data quality / observability tooling",
+                   "Mentoring or leading engineers", "Logistics, mobility or supply chain background"],
+  "keywords": [
+    {"term": "Python", "priority": "must"},
+    {"term": "SQL", "priority": "must"},
+    {"term": "Apache Spark", "aliases": ["Spark", "PySpark"], "priority": "must"},
+    {"term": "Airflow", "aliases": ["MWAA"], "priority": "must"},
+    {"term": "dbt", "priority": "must"},
+    {"term": "AWS", "priority": "must"},
+    {"term": "data modeling", "aliases": ["dimensional model", "data vault"], "priority": "must"},
+    {"term": "streaming", "aliases": ["Kafka", "Kinesis", "Structured Streaming"], "priority": "must"},
+    {"term": "lakehouse", "aliases": ["Delta Lake", "Databricks"], "priority": "must"},
+    {"term": "data pipelines", "aliases": ["pipelines", "pipeline"], "priority": "must"},
+    {"term": "Terraform", "aliases": ["infrastructure as code", "IaC"], "priority": "nice"},
+    {"term": "Kubernetes", "aliases": ["K8s", "EKS"], "priority": "nice"},
+    {"term": "data quality", "aliases": ["observability", "data tests", "Great Expectations"], "priority": "nice"},
+    {"term": "data contracts", "priority": "nice"},
+    {"term": "mentor", "aliases": ["mentoring", "mentored"], "priority": "nice"},
+    {"term": "logistics", "aliases": ["mobility", "supply chain", "freight", "fleet"], "priority": "nice"}
+  ]
+}

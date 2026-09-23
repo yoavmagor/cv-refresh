@@ -1,0 +1,29 @@
+Jordan Avery
+Data Engineer
+Tel Aviv, Israel | jordan.avery@example.com | linkedin.com/in/jordan-avery-example
+PROFILE
+Data engineer with 6 years of experience building batch data pipelines and BI platforms for retail and healthcare
+companies. Comfortable across the stack, from SQL modeling to Python ETL and dashboarding.
+PROFESSIONAL EXPERIENCE
+Senior Data Engineer, Harborlight Logistics Apr 2022 – Present
+ Joined to build the company's new data platform.
+Data Engineer, Quillstone Retail Jan 2019 – Mar 2022
+ Built and maintained 40+ Airflow DAGs ingesting POS and e-commerce data into Amazon Redshift.
+ Migrated legacy SSIS jobs to Python, reducing nightly load time from 5 hours to 2 hours.
+ Optimised Redshift distribution and sort keys, cutting dashboard query times by 60%.
+ Designed a dimensional sales model used by 120 analysts across 3 countries.
+ Worked on data quality checks with Great Expectations.
+BI Developer, Pinecrest Health Analytics Aug 2016 – Dec 2018
+ Developed Tableau dashboards for hospital operations teams.
+ Wrote complex SQL for claims analysis in SQL Server.
+ Responsible for monthly reporting to 14 client hospitals.
+TECHNICAL SKILLS
+Languages: Python, SQL, Bash
+Data: Airflow, Amazon Redshift, Great Expectations, SSIS, Tableau
+Cloud: AWS (S3, Glue, Lambda)
+EDUCATION
+B.Sc. Industrial Engineering and Management, Ben-Gurion University of the Negev 2012 – 2016
+MILITARY SERVICE
+Operations Analyst, IDF 2009 – 2012
+LANGUAGES
+Hebrew (Native) · English (Fluent)

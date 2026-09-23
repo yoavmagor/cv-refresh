@@ -1,0 +1,65 @@
+{
+  "skill_name": "cv-refresh",
+  "notes": "Play the user from evals/fixtures/simulated-user-jordan.md. Objective checks: evals/check_outputs.py. Reference runs: examples/.",
+  "evals": [
+    {
+      "id": 1,
+      "name": "tailored-pdf-pasted-posting",
+      "prompt": "my cv is super outdated, i've been at harborlight for 4 years and it still says i just joined lol. here's the pdf. i want to apply to this job: [contents of job-posting-tessellate.md]",
+      "files": ["evals/fixtures/sample-cv-2022.pdf", "evals/fixtures/job-posting-tessellate.md"],
+      "expected_output": "Layout question asked once and saved. Question count announced before Q1, every question skippable, a follow-up round, previous roles offered by name. A tailored DOCX + PDF of at most 2 pages with a TL;DR summary; match score before/after and suggestions in chat; session history saved.",
+      "assertions": [
+        "Announces the number of planned questions before asking the first one",
+        "Every question offers a skip option",
+        "Offers interviews on previous roles by listing them by name",
+        "Output PDF is at most 2 pages",
+        "No numbers in the new CV that are absent from the original CV and the answers (lint_cv numbers check)",
+        "Kafka and Kubernetes are not claimed (user said no)",
+        "Employer names, official titles, start dates and degree are unchanged",
+        "No comments, highlights or placeholders inside the DOCX",
+        "Chat report includes match score before and after",
+        "Session history file saved with a complete header"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "generic-docx-preserve-layout",
+      "prompt": "Can you update my resume with my current job? No specific job in mind yet, just want it ready. Keep it looking like my current one. (attached: sample-cv-2022.docx)",
+      "files": ["evals/fixtures/sample-cv-2022.docx"],
+      "expected_output": "Generic CV in the mirror layout (A4, Cambria, teal centered header, uppercase teal headings, original section order), no match score, summary aimed at the roles the user wants.",
+      "assertions": [
+        "Uses the mirror template with style detected from the DOCX",
+        "Output keeps A4 paper size and the teal accent color",
+        "Does not produce a match score (no posting)",
+        "Output PDF is at most 2 pages",
+        "No invented numbers; US spelling"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "linkedin-export-and-linkedin-url",
+      "prompt": "i don't have a real cv, only my linkedin profile pdf. can you make me a proper one for this job https://www.linkedin.com/jobs/view/0000000000/",
+      "files": ["evals/fixtures/linkedin-export-sample.pdf"],
+      "expected_output": "Recognizes the LinkedIn export, tries the URL once, and on a login wall or incomplete page asks the user to paste the posting. Does not ask for LinkedIn API keys or credentials. The two-column export becomes a single-column CV.",
+      "assertions": [
+        "extract_cv reports format linkedin_pdf",
+        "Asks the user to paste the posting text when the fetch is incomplete",
+        "Never asks for a LinkedIn API key, password or cookie",
+        "Output is single column and at most 2 pages"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "returning-user-with-history",
+      "prompt": "time to update my cv again, same file as last time. nothing big changed except i started leading the platform guild",
+      "files": ["evals/fixtures/sample-cv-2022.pdf", "examples/tailored-jordan/work/session.md (pre-loaded into history)"],
+      "expected_output": "Does not re-ask the layout question. Reads the previous session, asks mainly what changed since then (a short batch), reuses earlier answers as sources.",
+      "assertions": [
+        "Layout question is not asked again",
+        "The first question references the previous session date",
+        "Planned batch is shorter than in the first session",
+        "Facts from the previous session appear without being re-asked"
+      ]
+    }
+  ]
+}

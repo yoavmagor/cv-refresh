@@ -1,0 +1,39 @@
+Jordan Avery
+Data Engineering Team Lead · Lakehouse, Streaming & Analytics Engineering
+Tel Aviv, Israel  |  jordan.avery@example.com  |  linkedin.com/in/jordan-avery-example
+Summary
+Data engineering team lead who builds and runs data platforms end to end: a Databricks lakehouse, batch and streaming pipelines in Python, Spark and SQL, and dbt modeling with tests and data contracts. 10 years in data across logistics, retail and healthcare.
+Currently leads a team of 4 data engineers at Harborlight Logistics, a freight-visibility SaaS, where the new lakehouse cut monthly warehouse cost by about 35%. Looking for a senior data platform role.
+Experience
+Harborlight Logistics	Apr 2022 – Present
+Data Engineering Team Lead (Jan 2024 – Present)  ·  Senior Data Engineer (Apr 2022 – Dec 2023)
+B2B SaaS for freight visibility used by shippers and carriers
+Lead a team of 4 data engineers that owns the data platform: carrier GPS/telematics and shipment-event ingestion, the lakehouse, dbt models and internal analytics
+Built the lakehouse on Databricks and Delta Lake, replacing Redshift and migrating 30 pipelines, which cut monthly warehouse cost by about 35%
+Built a near-real-time ETA events pipeline with Kinesis and Spark Structured Streaming, reducing latency from about 1 hour (batch) to under 5 minutes
+Introduced dbt with tests and set up data contracts with the backend team so schema changes stop breaking pipelines
+Work closely with data science, product and backend teams; write design docs and take part in the on-call rotation
+Interviewed and hired 2 engineers; mentor 2 junior engineers
+Tech: Python, SQL, PySpark, Databricks, Delta Lake, dbt, Airflow (MWAA), AWS (S3, Kinesis, Lambda, Glue), Terraform, GitHub Actions, Docker
+Data Engineer  ·  Quillstone Retail	Jan 2019 – Mar 2022
+Built and maintained 40+ Airflow DAGs ingesting POS and e-commerce data into Amazon Redshift
+Processed clickstream data with Apache Spark on Amazon EMR for about a year
+Designed a dimensional data model for sales reporting, used by 120 analysts across 3 countries
+Migrated legacy SSIS jobs to Python, reducing nightly load time from 5 hours to 2 hours
+Optimized Redshift distribution and sort keys, cutting dashboard query times by 60%
+Contributed to data quality checks with Great Expectations
+BI Developer  ·  Pinecrest Health Analytics	Aug 2016 – Dec 2018
+Developed Tableau dashboards for hospital operations teams and monthly reporting for 14 client hospitals
+Wrote complex SQL for claims analysis in SQL Server
+Skills
+Languages: Python, SQL, Bash
+Data platform: Databricks, Delta Lake, Apache Spark (PySpark, Structured Streaming), dbt, Airflow (MWAA), Amazon Redshift
+Cloud & DevOps: AWS (S3, Kinesis, Lambda, Glue, EMR), Terraform, GitHub Actions, Docker
+Modeling & quality: dimensional data modeling, dbt tests, Great Expectations, data contracts
+BI: Tableau
+Education
+B.Sc. Industrial Engineering and Management  ·  Ben-Gurion University of the Negev	2012 – 2016
+Military Service
+Operations Analyst  ·  IDF	2009 – 2012
+Languages
+Hebrew (Native)  ·  English (Fluent)

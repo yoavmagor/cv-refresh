@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "target": {"type": "original"},
+    "section_order": ["summary", "experience", "skills", "education", "military", "languages"],
+    "section_titles": {"summary": "Profile", "experience": "Professional Experience", "skills": "Technical Skills"}
+  },
+  "basics": {
+    "name": "Jordan Avery",
+    "headline": "Data Engineer",
+    "location": "Tel Aviv, Israel",
+    "email": "jordan.avery@example.com",
+    "links": [{"label": "LinkedIn", "url": "https://linkedin.com/in/jordan-avery-example", "display": "linkedin.com/in/jordan-avery-example"}]
+  },
+  "summary": ["Data engineer with 6 years of experience building batch data pipelines and BI platforms for retail and healthcare companies. Comfortable across the stack, from SQL modeling to Python ETL and dashboarding."],
+  "experience": [
+    {"company": "Harborlight Logistics", "title": "Senior Data Engineer", "start": "2022-04", "end": "present",
+     "bullets": ["Joined to build the company's new data platform."]},
+    {"company": "Quillstone Retail", "title": "Data Engineer", "start": "2019-01", "end": "2022-03",
+     "bullets": ["Built and maintained 40+ Airflow DAGs ingesting POS and e-commerce data into Amazon Redshift.",
+                 "Migrated legacy SSIS jobs to Python, reducing nightly load time from 5 hours to 2 hours.",
+                 "Optimised Redshift distribution and sort keys, cutting dashboard query times by 60%.",
+                 "Designed a dimensional sales model used by 120 analysts across 3 countries.",
+                 "Worked on data quality checks with Great Expectations."]},
+    {"company": "Pinecrest Health Analytics", "title": "BI Developer", "start": "2016-08", "end": "2018-12",
+     "bullets": ["Developed Tableau dashboards for hospital operations teams.",
+                 "Wrote complex SQL for claims analysis in SQL Server.",
+                 "Responsible for monthly reporting to 14 client hospitals."]}
+  ],
+  "skills": [
+    {"group": "Languages", "items": ["Python", "SQL", "Bash"]},
+    {"group": "Data", "items": ["Airflow", "Amazon Redshift", "Great Expectations", "SSIS", "Tableau"]},
+    {"group": "Cloud", "items": ["AWS (S3, Glue, Lambda)"]}
+  ],
+  "education": [{"institution": "Ben-Gurion University of the Negev", "degree": "B.Sc.", "field": "Industrial Engineering and Management", "start": "2012", "end": "2016"}],
+  "languages": [{"language": "Hebrew", "level": "Native"}, {"language": "English", "level": "Fluent"}],
+  "extra_sections": [
+    {"key": "military", "title": "Military Service",
+     "items": [{"title": "Operations Analyst", "company": "IDF", "start": "2009", "end": "2012"}]}
+  ]
+}
