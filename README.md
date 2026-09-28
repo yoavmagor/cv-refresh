@@ -8,6 +8,13 @@ proofreads it, and scores how well it matches the job.
 Built for the moment every job search starts with: *"ugh, my CV still describes the job
 I had three years ago."*
 
+## Why I built this
+
+Updating a CV should be a five-minute chore. Somehow it never is — even just adding one
+new job to an existing file turns into a whole Thing, and I'd procrastinate on it for
+weeks like it was a rewrite from scratch. So I built the interactive version I actually
+wanted: answer a few short questions, let it do the writing, stop dreading it.
+
 ![Example output](examples/tailored-jordan/output/Jordan_Avery_CV_Tessellate_preview-1.png)
 
 *Fictional example. See [`examples/tailored-jordan/`](examples/tailored-jordan/) for the full session.*

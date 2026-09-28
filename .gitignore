@@ -5,6 +5,10 @@ cv-refresh-user-data*.zip
 
 # Build output
 dist/
+*.skill
+
+# Personal CV files (this user's own inputs/outputs, not part of the skill)
+2026_09_28/
 
 # Local test runs (examples/ holds the curated, fictional reference runs)
 evals/workspace/
