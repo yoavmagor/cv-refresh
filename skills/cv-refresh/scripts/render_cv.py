@@ -12,9 +12,17 @@ Usage:
 Templates:
   mirror   fonts, sizes, colors, margins and heading style detected from the
            user's original CV (style.json); always a single column
-  classic  serif (Cambria), centered header, black headings with a rule
-  modern   sans (Calibri), left header, colored headings
-  compact  sans (Arial), tight margins and spacing, for dense 2-page CVs
+  classic  serif (Cambria), centered header, deep-red accent, black headings with a rule
+  modern   sans (Calibri), left header, blue accent, colored headings with a rule
+  compact  sans (Arial), tight margins and spacing, green accent, for dense 2-page CVs
+
+Every template gets a colored rule under the header (name/contact block) and under
+each section heading, and the company/institution name on a role or education line
+renders in the accent color -- plain black-on-white was the default before and read
+as flat. Keep these subtle: a CV is still a document a recruiter skims in seconds, not
+a poster. A bare URL or `github.com/...` reference inside a bullet or an
+`extra_sections` `lines` item is auto-linkified (underlined, accent-colored, clickable)
+by `add_text_with_links` -- do not hand-format links yourself in cv.json text.
 
 --autofit only changes typography (spacing, font size, margins) within
 readable limits. If the CV still exceeds --max-pages, the JSON output says so
@@ -52,22 +60,22 @@ from extract_style import DEFAULT_STYLE  # noqa: E402
 TEMPLATES = {
     "classic": {
         "font_body": "Cambria", "font_heading": "Cambria", "size_body": 10.5, "size_name": 22,
-        "size_heading": 11.5, "accent_color": "000000", "heading_color": "000000",
-        "heading_case": "upper", "heading_bold": True, "heading_rule": True,
+        "size_heading": 11.5, "accent_color": "7A1F2B", "heading_color": "000000",
+        "heading_case": "upper", "heading_bold": True, "heading_rule": True, "header_rule": True,
         "header_alignment": "center",
         "margins_in": {"top": 0.7, "bottom": 0.7, "left": 0.8, "right": 0.8},
     },
     "modern": {
         "font_body": "Calibri", "font_heading": "Calibri", "size_body": 10.5, "size_name": 24,
         "size_heading": 12, "accent_color": "1F4E79", "heading_color": "1F4E79",
-        "heading_case": "upper", "heading_bold": True, "heading_rule": False,
+        "heading_case": "upper", "heading_bold": True, "heading_rule": True, "header_rule": True,
         "header_alignment": "left",
         "margins_in": {"top": 0.65, "bottom": 0.65, "left": 0.75, "right": 0.75},
     },
     "compact": {
         "font_body": "Arial", "font_heading": "Arial", "size_body": 9.5, "size_name": 18,
-        "size_heading": 10.5, "accent_color": "222222", "heading_color": "000000",
-        "heading_case": "upper", "heading_bold": True, "heading_rule": True,
+        "size_heading": 10.5, "accent_color": "2E5C4A", "heading_color": "000000",
+        "heading_case": "upper", "heading_bold": True, "heading_rule": True, "header_rule": True,
         "header_alignment": "left",
         "margins_in": {"top": 0.5, "bottom": 0.5, "left": 0.55, "right": 0.55},
     },
@@ -143,7 +151,7 @@ def bottom_border(paragraph_format_holder, color: str) -> None:
     ppr.append(borders)
 
 
-def add_hyperlink(paragraph, url: str, text: str, color: str) -> None:
+def add_hyperlink(paragraph, url: str, text: str, color: str, underline: bool = False) -> None:
     part = paragraph.part
     r_id = part.relate_to(url, RT.HYPERLINK, is_external=True)
     link = OxmlElement("w:hyperlink")
@@ -153,6 +161,10 @@ def add_hyperlink(paragraph, url: str, text: str, color: str) -> None:
     col = OxmlElement("w:color")
     col.set(qn("w:val"), color)
     rpr.append(col)
+    if underline:
+        u = OxmlElement("w:u")
+        u.set(qn("w:val"), "single")
+        rpr.append(u)
     run.append(rpr)
     t = OxmlElement("w:t")
     t.text = text
@@ -160,6 +172,30 @@ def add_hyperlink(paragraph, url: str, text: str, color: str) -> None:
     run.append(t)
     link.append(run)
     paragraph._p.append(link)
+
+
+INLINE_LINK_RE = re.compile(r"(https?://\S+|(?:www\.)?github\.com/\S+)", re.I)
+
+
+def add_text_with_links(paragraph, text: str, color: str) -> None:
+    """Add text to a paragraph, turning any bare URL / github.com reference into
+    a clickable, colored, underlined hyperlink run distinct from the rest of the text."""
+    pos = 0
+    for m in INLINE_LINK_RE.finditer(text):
+        start, end = m.span()
+        if start > pos:
+            paragraph.add_run(text[pos:start])
+        raw = m.group(0)
+        trail = ""
+        while raw and raw[-1] in ").,;:":
+            trail = raw[-1] + trail
+            raw = raw[:-1]
+        add_hyperlink(paragraph, normalize_url(raw), raw, color, underline=True)
+        if trail:
+            paragraph.add_run(trail)
+        pos = end
+    if pos < len(text):
+        paragraph.add_run(text[pos:])
 
 
 def normalize_url(value: str) -> str:
@@ -225,7 +261,10 @@ class Builder:
         self._para_style("CV Name", p["size_name"], bold=True, color=p["accent_color"],
                          font=p["font_heading"], after=1, align=align)
         self._para_style("CV Headline", body + 1.5, color="333333", after=2, align=align)
-        self._para_style("CV Contact", body - 0.5, color="333333", after=4 * sp, align=align)
+        contact = self._para_style("CV Contact", body - 0.5, color="333333", after=6 * sp, align=align)
+        if p.get("header_rule"):
+            contact.paragraph_format.space_after = Pt(8 * sp)
+            bottom_border(contact.element, p["accent_color"])
         heading = self._para_style("CV Heading", p["size_heading"], bold=p["heading_bold"],
                                    color=p["heading_color"], font=p["font_heading"],
                                    before=10 * sp, after=3 * sp, keep_next=True)
@@ -256,14 +295,17 @@ class Builder:
         self.para("CV Heading", text)
 
     def bullet(self, text):
-        self.para("List Bullet", text)
+        para = self.doc.add_paragraph(style="List Bullet")
+        add_text_with_links(para, text, self.p["accent_color"])
+        return para
 
     def role_line(self, left_bold, left_rest, right):
         para = self.para("CV Role")
         para.paragraph_format.tab_stops.add_tab_stop(self.text_width, WD_TAB_ALIGNMENT.RIGHT)
         para.add_run(left_bold).bold = True
         if left_rest:
-            para.add_run(left_rest)
+            run = para.add_run(left_rest)
+            run.font.color.rgb = RGBColor.from_string(self.p["accent_color"])
         if right:
             para.add_run("\t" + right)
         return para
@@ -277,19 +319,19 @@ class Builder:
         items = []
         for key in ("location", "phone", "email"):
             if b.get(key):
-                items.append((b[key], key == "email"))
+                items.append((b[key], key == "email", b[key] if key == "email" else ""))
         for link in b.get("links", []) or []:
-            label = link.get("display") or re.sub(r"^https?://(www\.)?", "", link.get("url", "")).rstrip("/")
-            items.append((label, True, link.get("url")))
+            url = link.get("url") or ""
+            label = link.get("display") or re.sub(r"^https?://(www\.)?", "", url).rstrip("/")
+            items.append((label, bool(url), url))
         if items:
             para = self.para("CV Contact")
             for i, item in enumerate(items):
                 if i:
                     para.add_run("  |  ")
-                text, linked = item[0], item[1]
+                text, linked, url = item
                 if linked:
-                    add_hyperlink(para, normalize_url(item[2] if len(item) > 2 and item[2] else text),
-                                  text, "000000" if self.p["accent_color"] in ("000000", "222222") else self.p["accent_color"])
+                    add_hyperlink(para, normalize_url(url), text, self.p["accent_color"])
                 else:
                     para.add_run(text)
 
@@ -417,8 +459,9 @@ class Builder:
             if isinstance(item, dict):
                 self.role_block(item)
             elif style == "lines":
-                para = self.para("CV Body", item)
+                para = self.para("CV Body")
                 para.paragraph_format.space_after = Pt(1.5 * self.sp)
+                add_text_with_links(para, item, self.p["accent_color"])
             else:
                 self.bullet(item)
 

@@ -31,17 +31,22 @@ recruiter may verify. Breaking them costs the user far more than a weaker CV.
    original CV has a number that is probably stale (e.g. "6 years of experience"
    written years ago), ask the user for the current value instead of recalculating.
    `lint_cv.py` audits this; fix every number it flags.
-3. **Facts that stay fixed:** employer names, official job titles, employment dates,
+3. **Never invent a link.** A `links[].url`, `projects[].link`, or any URL you put in a
+   bullet must come from a source or the user, never be guessed from a label ("LinkedIn"
+   is not a URL). If you don't have one, render it as plain, non-clickable text and ask
+   once rather than fabricate a destination. Before delivering, verify every link that
+   will render as clickable actually resolves (see `references/review-guide.md`).
+4. **Facts that stay fixed:** employer names, official job titles, employment dates,
    degrees and institutions. Everything else is yours to change: wording, order,
    emphasis, headline, which items to keep, whole-document rewrites. Tailoring may
    produce an entirely new version.
-4. **Comments live in chat, never in the document.** No Word comments, highlights,
+5. **Comments live in chat, never in the document.** No Word comments, highlights,
    tracked changes, bracketed placeholders ("[add metric]") or notes-to-self in the
    CV. Every question, suggestion and caveat goes into the conversation.
-5. **Two pages maximum**, hard cap, verified by rendering.
-6. **US English** output with US spelling. If the source CV is in another language,
+6. **Two pages maximum**, hard cap, verified by rendering.
+7. **US English** output with US spelling. If the source CV is in another language,
    translate faithfully and say so in chat.
-7. **Low effort for the user.** Short questions, skip always allowed, never ask
+8. **Low effort for the user.** Short questions, skip always allowed, never ask
    something the CV or history already answers.
 
 ## Workflow
@@ -80,6 +85,10 @@ Then:
 3. Transcribe the original faithfully into `WORK_DIR/original.cv.json` following
    `references/cv-schema.md`. Transcribe only; improving comes later. This file is the
    baseline for "what changed" and for the before/after match score.
+   Text extraction loses hyperlink targets (a PDF/DOCX shows "LinkedIn" as a word, not
+   its URL). If the source has a link with no URL you can recover, ask the user for it
+   once while gathering answers, rather than guessing one from the label later — see
+   the ground rules and `references/cv-schema.md`.
 4. If there is a posting, build `WORK_DIR/posting.json` (schema in the intake reference).
 5. Tell the user in 2-3 lines what you found: the roles you see, which one looks
    current, and what looks missing or outdated.
@@ -126,7 +135,9 @@ input CV unless the user named another.
 - `layout_mode = choose`: render `--template mirror,classic,modern,compact` into
   `WORK_DIR/options/`. Show the user the page-1 previews (or the PDFs), ask which one
   they want, render the chosen template to the output folder, and
-  `state.py set last_template NAME`.
+  `state.py set last_template NAME`. Each template has its own accent color and a
+  colored rule under the header and section headings (see `render_cv.py`'s docstring) —
+  a flat black-and-white CV reads as unfinished, so don't strip these back to plain.
 
 ```
 python3 SKILL_DIR/scripts/render_cv.py --cv WORK_DIR/new.cv.json --out-dir OUT \
@@ -150,10 +161,13 @@ Read `references/review-guide.md`. Then:
    Treat the warnings as judgment calls.
 2. Proofread the final text yourself: `extract_cv.py OUT/First_Last_CV.docx --out WORK_DIR/final.txt`.
    Fix spelling, grammar, consistency and tense.
-3. If there is a posting: `check_keywords.py --posting WORK_DIR/posting.json --cv WORK_DIR/new.cv.json --before WORK_DIR/original.cv.json`.
+3. Verify every link (`basics.links`, `projects[].link`, any URL in a bullet) is real
+   and reachable — never one you guessed. See the link-verification steps in the review
+   guide before delivering.
+4. If there is a posting: `check_keywords.py --posting WORK_DIR/posting.json --cv WORK_DIR/new.cv.json --before WORK_DIR/original.cv.json`.
    Then score the original and the new CV with the rubric.
-4. Re-render after any fix and confirm it is still at most 2 pages.
-5. Report in chat using the template in the review guide.
+5. Re-render after any fix and confirm it is still at most 2 pages.
+6. Report in chat using the template in the review guide.
 
 ### 7. Deliver and record
 

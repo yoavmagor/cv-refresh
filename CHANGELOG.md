@@ -9,6 +9,28 @@ For a user-facing summary of each release, see [RELEASE_NOTES.md](RELEASE_NOTES.
 
 ## [Unreleased]
 
+### Added
+- Ground rule: never fabricate a link (`basics.links[].url`, `projects[].link`, or a
+  URL in a bullet) from a label. Missing URLs render as plain text and get asked about
+  once instead of guessed.
+- Review guide step: verify every link that will render as clickable actually resolves
+  before delivery, using the host's fetch tool, with documented false-negative cases
+  (LinkedIn blocks automated fetches; GitHub's profile page is client-rendered — use
+  `gh api` for those instead of trusting a fetch-tool error).
+- `render_cv.py`: bare URLs and `github.com/...` references typed directly into a
+  bullet or an `extra_sections` `lines` item are now auto-linkified as clickable,
+  underlined, accent-colored hyperlinks (`add_text_with_links`).
+- `render_cv.py`: every template now gets a colored rule under the header and under
+  each section heading, and the company/institution name on a role or education line
+  renders in the template's accent color, so the default output no longer reads as flat
+  black-and-white. `classic` and `compact` each got a distinct accent color instead of
+  near-black; `modern`'s section-heading rule was turned on.
+
+### Fixed
+- `render_cv.py`: the header would silently fabricate a URL (e.g. `https://LinkedIn`)
+  for a link whose `url` was empty, using the display label as a fallback. It now
+  renders as plain, non-clickable text instead.
+
 ## [1.0.0] - 2026-09-23
 
 ### Added

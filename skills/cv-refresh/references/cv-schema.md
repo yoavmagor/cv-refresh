@@ -79,3 +79,10 @@ write two instances per session: `original.cv.json`, a faithful transcription, a
   default, or `lines`) or role-like objects (title, company, start, end, bullets).
 - **Header and contact details** go in `basics` and are rendered in the document body,
   not in the page header or footer. Some applicant tracking systems skip those areas.
+- **Links (`basics.links[].url`, `projects[].link`):** only set `url` when you actually
+  have one, from a source or the user. Leave it `""` when you don't — the renderer shows
+  the label as plain, non-clickable text instead of guessing a destination from it (a
+  guessed URL is a fabricated fact). A bare URL or `github.com/...` reference typed
+  directly into a bullet or an `extra_sections` `lines` item is auto-linkified by the
+  renderer and shown underlined in the accent color, so it doesn't need a separate field.
+  Verify every link resolves before delivering (`references/review-guide.md`).

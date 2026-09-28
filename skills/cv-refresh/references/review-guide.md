@@ -32,7 +32,30 @@ and read all of it, top to bottom. Check for:
 
 Apply the fixes, re-render, and confirm the page count again.
 
-## 3. Match score (only when a posting was given)
+## 3. Verify every link is real and reachable
+
+Anything that will render as a clickable link — every `basics.links[].url`,
+`projects[].link`, and any bare URL inside a bullet or extra-section line (see
+`references/cv-schema.md`) — must be checked before delivery, not just typed in.
+
+1. **Never fabricate one first.** If a source or the user didn't give you a URL, leave
+   the field empty (it renders as plain, non-clickable text — see `render_cv.py`'s
+   `header()`) and ask once rather than guess one from a label like "LinkedIn" or
+   "GitHub". A guessed URL is a fabricated fact, same as an invented number.
+2. **Then fetch each one** with the host's tool (`WebFetch` in Claude Code, `web_fetch`
+   in claude.ai) to confirm it resolves. Treat these as expected, not failures:
+   - LinkedIn blocks automated fetches (HTTP 999 or similar) for any URL, valid or not —
+     it doesn't tell you the profile is broken. A LinkedIn URL the user typed or that
+     came from their own LinkedIn export is trustworthy without a fetch.
+   - A GitHub profile or repo page can come back as "content failed to load" from a
+     markdown-conversion fetch tool even when the page is real, because GitHub renders
+     client-side. Confirm with `gh api users/<name>` or `gh api repos/<owner>/<repo>`
+     instead when `gh` is available.
+   A genuine 404, parked-domain page, or login wall on something meant to be public is
+   a real problem: tell the user in chat rather than silently dropping or editing the
+   link yourself — they may know it's temporarily down, or need to give you the fix.
+
+## 4. Match score (only when a posting was given)
 
 ```
 python3 SKILL_DIR/scripts/check_keywords.py --posting WORK_DIR/posting.json \
@@ -53,7 +76,7 @@ sees what the update achieved:
 Bands: 85+ strong match · 70-84 good · 55-69 partial · under 55 a stretch.
 Be honest: a truthful CV can't close a real gap, and the score should show that.
 
-## 4. Chat report template
+## 5. Chat report template
 
 Keep it scannable. Use this structure and drop the parts that don't apply:
 
@@ -73,6 +96,8 @@ Keep it scannable. Use this structure and drop the parts that don't apply:
 **Fixes applied**
 - "Optimised" → "Optimized" (US spelling)
 - "Worked on data quality checks" → rewritten with a stronger verb
+
+**Links checked:** LinkedIn, GitHub, portfolio.example.com — all resolve.
 
 **Suggestions (not applied)**
 1. If you have a public talk, blog post or open-source work on data contracts, add a link; it's a differentiator here.

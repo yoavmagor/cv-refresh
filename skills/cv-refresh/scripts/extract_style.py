@@ -37,6 +37,7 @@ DEFAULT_STYLE = {
     "heading_case": "upper",
     "heading_bold": True,
     "heading_rule": True,
+    "header_rule": True,
     "header_alignment": "left",
     "section_order": [],
     "columns": 1,
