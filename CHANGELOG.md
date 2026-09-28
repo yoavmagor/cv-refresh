@@ -17,14 +17,24 @@ For a user-facing summary of each release, see [RELEASE_NOTES.md](RELEASE_NOTES.
   before delivery, using the host's fetch tool, with documented false-negative cases
   (LinkedIn blocks automated fetches; GitHub's profile page is client-rendered — use
   `gh api` for those instead of trusting a fetch-tool error).
-- `render_cv.py`: bare URLs and `github.com/...` references typed directly into a
-  bullet or an `extra_sections` `lines` item are now auto-linkified as clickable,
-  underlined, accent-colored hyperlinks (`add_text_with_links`).
 - `render_cv.py`: every template now gets a colored rule under the header and under
   each section heading, and the company/institution name on a role or education line
   renders in the template's accent color, so the default output no longer reads as flat
   black-and-white. `classic` and `compact` each got a distinct accent color instead of
   near-black; `modern`'s section-heading rule was turned on.
+- `render_cv.py`: body text and bullets (`CV Body`, `List Bullet` styles) are now
+  justified instead of left-aligned.
+- `render_cv.py`: a new `add_rich_text` helper (used everywhere text is rendered —
+  bullets, summary paragraphs, `extra_sections` "lines" items) parses two inline
+  markers: `**term**` renders bold, and a bare URL or `github.com/...` reference is
+  auto-linkified as a clickable, underlined, accent-colored hyperlink. Documented in
+  `references/cv-schema.md` and `references/writing-guide.md` (bold the 1-2 key nouns
+  per bullet, don't hand-format links).
+- Writing guide: tightened bullet counts (3-4 current role, 2-3 recent past, 0-1 old),
+  and made "collapse an old role into an Earlier Experience line" something to do for
+  any role beyond the most recent two or three, not only a last resort when a CV still
+  doesn't fit 2 pages — a CV that technically fits but lists every role in full, at
+  even length, reads as a wall of text.
 
 ### Fixed
 - `render_cv.py`: the header would silently fabricate a URL (e.g. `https://LinkedIn`)

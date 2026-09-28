@@ -33,14 +33,26 @@ Example (every fact here is in the fictional sources):
   role (Built, Led, Designed, Migrated, Cut, Introduced, Owns).
 - Pattern: **action + what + how/with what + result**. Include the result only if it's
   known. A bullet without a number is fine. A bullet with an invented number is not.
-- 1-2 lines each. 3-6 bullets for the current role, 2-4 for recent past roles,
-  0-2 for old ones.
+- 1-2 lines each. 3-4 bullets for the current role, 2-3 for recent past roles,
+  0-1 for old ones (compress older roles into `extra_sections` "Earlier Experience"
+  lines instead of giving each one a full role block — see below). A CV that lists
+  every role in full, at even length, reads as a wall of text; length should track
+  relevance, not just fill the page.
 - Merge overlapping bullets. Drop duties that any holder of the title would have
-  ("attended meetings").
+  ("attended meetings"). When in doubt, cut rather than keep — a dense, cluttered page
+  reads worse than a shorter one with room to breathe. If a section still looks dense
+  after trimming bullets, that's the signal to compress it into an Earlier Experience
+  line (see "Trimming to two pages" below), not to shrink the font further.
 - Keep punctuation consistent: end every bullet with a period or none of them (the
   default is none).
 - Don't bury the lead: in a tailored CV, the bullet most relevant to the posting goes
   first within each role.
+- Wrap the one or two most important nouns per bullet — the key tool, platform, or
+  result — in `**double asterisks**`; the renderer turns them bold. This is for
+  scannability, not decoration: a recruiter skimming in seconds should be able to
+  catch the load-bearing words without reading full sentences. Don't bold more than
+  a third of a bullet's words, and don't bold something in every single bullet if nothing
+  in it is actually a standout term.
 
 ## Tailoring (a posting was given)
 
@@ -75,14 +87,27 @@ strongest achievements from every recent role.
   standard in the field.
 - Contact details in the body, a single column, no tables, text boxes or images for
   content. The renderer already does this.
+- The renderer justifies body text and bullets (both margins even, like a printed
+  book) and bolds anything wrapped in `**...**`, and gives every template a colored
+  accent rule under the header and section headings — don't fight these by writing
+  around them; write bullets that are short enough to justify cleanly (very short
+  bullets can justify awkwardly with stretched word gaps) and mark the 1-2 key terms
+  per bullet in `**bold**` as described above.
 
 ## Trimming to two pages
 
-When the render is still over 2 pages after autofit, cut in this order, re-rendering
-between steps:
+Aim to need this rarely: write tight the first time (see "Bullets" above) rather than
+writing long and trimming after. A CV that needs heavy autofit (small font, tight
+spacing) to fit 2 pages looks worse than one that fits naturally with room to spare.
+
+When the render is still over 2 pages after autofit, or a page just looks crowded even
+within the limit, cut in this order, re-rendering between steps:
 
 1. bullets of roles older than about 10 years or irrelevant to the target
-2. old roles collapsed into one "Earlier Experience" line each
+2. old roles collapsed into one "Earlier Experience" line each -- do this for any role
+   that isn't in the most recent two or three, not only as a last resort; a page of
+   five same-length role blocks is the "wall of text" problem even when it technically
+   fits 2 pages
 3. the weakest bullets in mid-career roles (keep at least 2 per role)
 4. the skills list: remove items irrelevant to the target, merge groups
 5. education details, certifications and courses that don't serve the target

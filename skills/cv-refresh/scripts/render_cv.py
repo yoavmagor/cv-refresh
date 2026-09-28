@@ -20,9 +20,16 @@ Every template gets a colored rule under the header (name/contact block) and und
 each section heading, and the company/institution name on a role or education line
 renders in the accent color -- plain black-on-white was the default before and read
 as flat. Keep these subtle: a CV is still a document a recruiter skims in seconds, not
-a poster. A bare URL or `github.com/...` reference inside a bullet or an
-`extra_sections` `lines` item is auto-linkified (underlined, accent-colored, clickable)
-by `add_text_with_links` -- do not hand-format links yourself in cv.json text.
+a poster. Body text and bullets are justified (even margins on both sides), not just
+left-aligned, for a more typeset look. Inline markup, handled by `add_rich_text` and
+usable in any bullet, summary paragraph, or `extra_sections` "lines" item:
+  - `**term**` renders as bold -- use it in cv.json text for the 1-2 key nouns per
+    bullet (tool, platform, result), not for whole sentences.
+  - a bare URL or `github.com/...` reference is auto-linkified (underlined,
+    accent-colored, clickable).
+Do not hand-format either of these in cv.json text (no manual bold-looking phrasing,
+no markdown link syntax) -- write `**word**` or the plain URL and the renderer does
+the rest.
 
 --autofit only changes typography (spacing, font size, margins) within
 readable limits. If the CV still exceeds --max-pages, the JSON output says so
@@ -174,25 +181,34 @@ def add_hyperlink(paragraph, url: str, text: str, color: str, underline: bool = 
     paragraph._p.append(link)
 
 
-INLINE_LINK_RE = re.compile(r"(https?://\S+|(?:www\.)?github\.com/\S+)", re.I)
+INLINE_RE = re.compile(
+    r"\*\*(?P<bold>[^*]+)\*\*"
+    r"|(?P<url>https?://\S+|(?:www\.)?github\.com/\S+)",
+    re.I,
+)
 
 
-def add_text_with_links(paragraph, text: str, color: str) -> None:
-    """Add text to a paragraph, turning any bare URL / github.com reference into
-    a clickable, colored, underlined hyperlink run distinct from the rest of the text."""
+def add_rich_text(paragraph, text: str, link_color: str) -> None:
+    """Add text to a paragraph, expanding two inline markers:
+    **term** becomes a bold run (for emphasizing tools, results, key nouns in a
+    bullet); a bare URL or github.com/... reference becomes a clickable, colored,
+    underlined hyperlink distinct from the rest of the text."""
     pos = 0
-    for m in INLINE_LINK_RE.finditer(text):
+    for m in INLINE_RE.finditer(text):
         start, end = m.span()
         if start > pos:
             paragraph.add_run(text[pos:start])
-        raw = m.group(0)
-        trail = ""
-        while raw and raw[-1] in ").,;:":
-            trail = raw[-1] + trail
-            raw = raw[:-1]
-        add_hyperlink(paragraph, normalize_url(raw), raw, color, underline=True)
-        if trail:
-            paragraph.add_run(trail)
+        if m.group("bold") is not None:
+            paragraph.add_run(m.group("bold")).bold = True
+        else:
+            raw = m.group("url")
+            trail = ""
+            while raw and raw[-1] in ").,;:":
+                trail = raw[-1] + trail
+                raw = raw[:-1]
+            add_hyperlink(paragraph, normalize_url(raw), raw, link_color, underline=True)
+            if trail:
+                paragraph.add_run(trail)
         pos = end
     if pos < len(text):
         paragraph.add_run(text[pos:])
@@ -274,7 +290,7 @@ class Builder:
         self._para_style("CV Role", body + 0.5, before=6 * sp, after=0, keep_next=True)
         self._para_style("CV Meta", body - 0.5, italic=True, color="555555", after=1.5 * sp, keep_next=True)
         self._para_style("CV Positions", body, color="222222", after=1 * sp, keep_next=True)
-        self._para_style("CV Body", body, after=3 * sp)
+        self._para_style("CV Body", body, after=3 * sp, align=WD_ALIGN_PARAGRAPH.JUSTIFY)
         self._para_style("CV Tech", body - 0.5, color="444444", before=1 * sp, after=1 * sp)
         lb = self.doc.styles["List Bullet"]
         set_font(lb.element, p["font_body"])
@@ -283,21 +299,20 @@ class Builder:
         lb.paragraph_format.line_spacing = 1.0
         lb.paragraph_format.left_indent = Inches(0.22)
         lb.paragraph_format.first_line_indent = Inches(-0.16)
+        lb.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
 
     # primitives ------------------------------------------------------------
     def para(self, style, text=""):
         para = self.doc.add_paragraph(style=style)
         if text:
-            para.add_run(text)
+            add_rich_text(para, text, self.p["accent_color"])
         return para
 
     def heading(self, text):
         self.para("CV Heading", text)
 
     def bullet(self, text):
-        para = self.doc.add_paragraph(style="List Bullet")
-        add_text_with_links(para, text, self.p["accent_color"])
-        return para
+        return self.para("List Bullet", text)
 
     def role_line(self, left_bold, left_rest, right):
         para = self.para("CV Role")
@@ -459,9 +474,8 @@ class Builder:
             if isinstance(item, dict):
                 self.role_block(item)
             elif style == "lines":
-                para = self.para("CV Body")
+                para = self.para("CV Body", item)
                 para.paragraph_format.space_after = Pt(1.5 * self.sp)
-                add_text_with_links(para, item, self.p["accent_color"])
             else:
                 self.bullet(item)
 
