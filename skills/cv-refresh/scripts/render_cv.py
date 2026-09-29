@@ -53,7 +53,7 @@ try:
     from docx import Document  # type: ignore
     from docx.enum.style import WD_STYLE_TYPE  # type: ignore
     from docx.enum.table import WD_TABLE_ALIGNMENT  # noqa: F401  # type: ignore
-    from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT  # type: ignore
+    from docx.enum.text import WD_ALIGN_PARAGRAPH  # type: ignore
     from docx.opc.constants import RELATIONSHIP_TYPE as RT  # type: ignore
     from docx.oxml import OxmlElement  # type: ignore
     from docx.oxml.ns import qn  # type: ignore
@@ -76,14 +76,14 @@ TEMPLATES = {
         "font_body": "Calibri", "font_heading": "Calibri", "size_body": 10.5, "size_name": 24,
         "size_heading": 12, "accent_color": "1F4E79", "heading_color": "1F4E79",
         "heading_case": "upper", "heading_bold": True, "heading_rule": True, "header_rule": True,
-        "header_alignment": "left",
+        "header_alignment": "center",
         "margins_in": {"top": 0.65, "bottom": 0.65, "left": 0.75, "right": 0.75},
     },
     "compact": {
         "font_body": "Arial", "font_heading": "Arial", "size_body": 9.5, "size_name": 18,
         "size_heading": 10.5, "accent_color": "2E5C4A", "heading_color": "000000",
         "heading_case": "upper", "heading_bold": True, "heading_rule": True, "header_rule": True,
-        "header_alignment": "left",
+        "header_alignment": "center",
         "margins_in": {"top": 0.5, "bottom": 0.5, "left": 0.55, "right": 0.55},
     },
 }
@@ -245,7 +245,6 @@ class Builder:
         m = self.p["margins_in"]
         sec.top_margin, sec.bottom_margin = Inches(m["top"]), Inches(m["bottom"])
         sec.left_margin, sec.right_margin = Inches(m["left"]), Inches(m["right"])
-        self.text_width = sec.page_width - sec.left_margin - sec.right_margin
 
     def _para_style(self, name, size, bold=False, italic=False, color=None, font=None,
                     before=0.0, after=0.0, align=None, keep_next=False):
@@ -274,9 +273,12 @@ class Builder:
         body = p["size_body"]
         align = WD_ALIGN_PARAGRAPH.CENTER if p["header_alignment"] == "center" else WD_ALIGN_PARAGRAPH.LEFT
         self._para_style("Normal", body, color="000000", after=0)
-        self._para_style("CV Name", p["size_name"], bold=True, color=p["accent_color"],
-                         font=p["font_heading"], after=1, align=align)
-        self._para_style("CV Headline", body + 1.5, color="333333", after=2, align=align)
+        name_style = self._para_style("CV Name", p["size_name"], bold=True, color=p["accent_color"],
+                                      font=p["font_heading"], after=1, align=align)
+        name_style.font.all_caps = True
+        headline_style = self._para_style("CV Headline", body + 1.5, bold=True, color="333333",
+                                          after=2, align=align)
+        headline_style.font.all_caps = True
         contact = self._para_style("CV Contact", body - 0.5, color="333333", after=6 * sp, align=align)
         if p.get("header_rule"):
             contact.paragraph_format.space_after = Pt(8 * sp)
@@ -315,14 +317,19 @@ class Builder:
         return self.para("List Bullet", text)
 
     def role_line(self, left_bold, left_rest, right):
+        # Date sits right next to the title/company, not tab-jumped to the far
+        # margin: a long title or company name pushed the old right-aligned tab
+        # stop past the line width, wrapping the date onto its own orphaned line
+        # or overrunning the margin entirely.
         para = self.para("CV Role")
-        para.paragraph_format.tab_stops.add_tab_stop(self.text_width, WD_TAB_ALIGNMENT.RIGHT)
         para.add_run(left_bold).bold = True
         if left_rest:
             run = para.add_run(left_rest)
             run.font.color.rgb = RGBColor.from_string(self.p["accent_color"])
         if right:
-            para.add_run("\t" + right)
+            run = para.add_run("  ·  " + right)
+            run.font.italic = True
+            run.font.color.rgb = RGBColor.from_string("595959")
         return para
 
     # sections --------------------------------------------------------------
