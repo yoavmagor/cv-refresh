@@ -70,11 +70,10 @@ write two instances per session: `original.cv.json`, a faithful transcription, a
 - **`tech`:** optional "Tech:" line under a role. Use it when tools matter for the
   target; otherwise leave tools in `skills`.
 - **Inline markup in text** (bullets, `summary` paragraphs, `extra_sections` "lines"
-  items): wrap a word or short phrase in `**double asterisks**` to render it bold —
-  use this for the 1-2 key nouns per bullet (the tool, platform, or result), not for
-  whole sentences (see `references/writing-guide.md`). A bare URL or `github.com/...`
-  reference is rendered as a clickable link automatically; don't wrap it in markdown
-  link syntax.
+  items): a bare URL or `github.com/...` reference is rendered as a clickable link
+  automatically — don't wrap it in markdown link syntax. `**double asterisks**` around
+  a word or phrase also renders bold, but don't use it by default; write plain text
+  (see "Bullets" in `references/writing-guide.md` for why).
 - **`section_order`:** canonical keys `summary, experience, skills, projects, education,
   certifications, languages`, plus the `key` of any extra section. The summary is
   always rendered first, right under the header. Sections that exist in the data but

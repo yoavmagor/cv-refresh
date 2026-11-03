@@ -13,23 +13,30 @@ Templates:
   mirror   fonts, sizes, colors, margins and heading style detected from the
            user's original CV (style.json); always a single column
   classic  serif (Cambria), centered header, deep-red accent, black headings with a rule
-  modern   sans (Calibri), left header, blue accent, colored headings with a rule
-  compact  sans (Arial), tight margins and spacing, green accent, for dense 2-page CVs
+  modern   sans (Calibri), centered header, blue accent, colored headings with a rule
+  compact  sans (Arial), centered header, tight margins and spacing, green accent,
+           for dense 2-page CVs
 
-Every template gets a colored rule under the header (name/contact block) and under
-each section heading, and the company/institution name on a role or education line
-renders in the accent color -- plain black-on-white was the default before and read
-as flat. Keep these subtle: a CV is still a document a recruiter skims in seconds, not
-a poster. Body text and bullets are justified (even margins on both sides), not just
-left-aligned, for a more typeset look. Inline markup, handled by `add_rich_text` and
-usable in any bullet, summary paragraph, or `extra_sections` "lines" item:
-  - `**term**` renders as bold -- use it in cv.json text for the 1-2 key nouns per
-    bullet (tool, platform, result), not for whole sentences.
+Every template centers the header block and gets a colored rule under it (name/
+contact) and under each section heading; the company/institution name and the date on
+a role or education line render in the accent color too (the date sits right after the
+company, not right-tab-stopped to the far margin -- that wrapped or collided with the
+date when the title/company was long). Keep these subtle: a CV is still a document a
+recruiter skims in seconds, not a poster. Body text and bullets are justified (even
+margins on both sides), not just left-aligned, for a more typeset look.
+
+Inline markup, handled by `add_rich_text` and usable in any bullet, summary paragraph,
+or `extra_sections` "lines" item:
   - a bare URL or `github.com/...` reference is auto-linkified (underlined,
-    accent-colored, clickable).
-Do not hand-format either of these in cv.json text (no manual bold-looking phrasing,
-no markdown link syntax) -- write `**word**` or the plain URL and the renderer does
-the rest.
+    accent-colored, clickable) -- do not hand-format it with markdown link syntax,
+    just write the plain URL.
+  - `**term**` renders as bold. The capability is real, but cv.json text should not
+    use it by default: bolding the "key nouns" of every bullet was tried and reverted
+    after the person reviewing the output called it "a very bad job" -- with the role
+    line's title/company/date already bold and colored, more bold inside the bullets
+    read as cluttered rather than scannable. Leave bullets, summaries and extra_sections
+    text plain; only reach for `**bold**` if the user explicitly asks to emphasize
+    something specific (see references/writing-guide.md).
 
 --autofit only changes typography (spacing, font size, margins) within
 readable limits. If the CV still exceeds --max-pages, the JSON output says so
