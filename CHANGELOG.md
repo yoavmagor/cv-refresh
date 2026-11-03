@@ -26,20 +26,41 @@ For a user-facing summary of each release, see [RELEASE_NOTES.md](RELEASE_NOTES.
   justified instead of left-aligned.
 - `render_cv.py`: a new `add_rich_text` helper (used everywhere text is rendered —
   bullets, summary paragraphs, `extra_sections` "lines" items) parses two inline
-  markers: `**term**` renders bold, and a bare URL or `github.com/...` reference is
-  auto-linkified as a clickable, underlined, accent-colored hyperlink. Documented in
-  `references/cv-schema.md` and `references/writing-guide.md` (bold the 1-2 key nouns
-  per bullet, don't hand-format links).
+  markers: a bare URL or `github.com/...` reference is auto-linkified as a clickable,
+  underlined, accent-colored hyperlink, and `**term**` renders bold (the capability is
+  real and supported, but see the Fixed/Changed entries below on why cv.json text
+  shouldn't use the bold marker by default).
 - Writing guide: tightened bullet counts (3-4 current role, 2-3 recent past, 0-1 old),
   and made "collapse an old role into an Earlier Experience line" something to do for
   any role beyond the most recent two or three, not only a last resort when a CV still
   doesn't fit 2 pages — a CV that technically fits but lists every role in full, at
   even length, reads as a wall of text.
+- `render_cv.py`: every template now centers the header block (name, headline, contact
+  line), and the name and headline render bold and in all caps.
+- `render_cv.py`: `basics.location` can now honestly represent two relevant places
+  (e.g. "Ramat Gan / Tel Aviv, Israel" for someone whose job and home city differ) —
+  no code change needed, just documented as a supported pattern since it came up.
 
 ### Fixed
 - `render_cv.py`: the header would silently fabricate a URL (e.g. `https://LinkedIn`)
   for a link whose `url` was empty, using the display label as a fallback. It now
   renders as plain, non-clickable text instead.
+- `render_cv.py`: the role/education date was right-tab-stopped to the far margin. A
+  title or company name long enough to pass the tab position wrapped the date onto its
+  own orphaned line, or — in the `compact` template's narrower margins — ran straight
+  into the date with no separating space and clipped it entirely. The date now sits
+  immediately after the company/institution name instead, styled italic and gray so it
+  still reads as distinct from the title.
+
+### Changed
+- Reverted the "bold the 1-2 key terms per bullet" writing guidance added above: tried
+  on a real CV, the person reviewing it called the result "a very bad job" and asked
+  for it to be undone. `references/writing-guide.md` and `references/cv-schema.md` now
+  say to write bullets, summaries, and `extra_sections` text as plain text by default —
+  with the role line's title/company/date already bold and colored, extra inline bold
+  inside the bullets read as cluttered rather than scannable. `**bold**` markup is still
+  supported by the renderer; only use it if the user explicitly asks to emphasize
+  something specific.
 
 ## [1.0.0] - 2026-09-23
 

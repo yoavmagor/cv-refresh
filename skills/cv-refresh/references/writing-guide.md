@@ -47,12 +47,16 @@ Example (every fact here is in the fictional sources):
   default is none).
 - Don't bury the lead: in a tailored CV, the bullet most relevant to the posting goes
   first within each role.
-- Wrap the one or two most important nouns per bullet — the key tool, platform, or
-  result — in `**double asterisks**`; the renderer turns them bold. This is for
-  scannability, not decoration: a recruiter skimming in seconds should be able to
-  catch the load-bearing words without reading full sentences. Don't bold more than
-  a third of a bullet's words, and don't bold something in every single bullet if nothing
-  in it is actually a standout term.
+- Write bullets as plain text, no inline emphasis. `render_cv.py` supports wrapping a
+  phrase in `**double asterisks**` for bold, and that's real and tested, but using it on
+  the "1-2 key nouns" of every bullet was tried and the user who saw the result called
+  it "a very bad job" and asked for it reverted -- a bullet list with some words bolded
+  in most lines reads as busier and harder to scan, not easier, especially once the
+  title and company name on the role line above it are already bold and colored. Leave
+  bullets, the summary, and `extra_sections` text plain by default. The one standing
+  exception is a bare URL or `github.com/...` reference, which still auto-linkifies on
+  its own and should not be wrapped in asterisks. Only reach for `**bold**` inside a
+  bullet if the user explicitly asks to emphasize something specific.
 
 ## Tailoring (a posting was given)
 
@@ -88,11 +92,12 @@ strongest achievements from every recent role.
 - Contact details in the body, a single column, no tables, text boxes or images for
   content. The renderer already does this.
 - The renderer justifies body text and bullets (both margins even, like a printed
-  book) and bolds anything wrapped in `**...**`, and gives every template a colored
-  accent rule under the header and section headings — don't fight these by writing
-  around them; write bullets that are short enough to justify cleanly (very short
-  bullets can justify awkwardly with stretched word gaps) and mark the 1-2 key terms
-  per bullet in `**bold**` as described above.
+  book), auto-linkifies bare URLs, and gives every template a colored accent rule under
+  the header and section headings, plus a colored company/institution name and date on
+  each role line — the page already has color and structure from this alone. Don't add
+  more with inline `**bold**` (see "Bullets" above); write bullets short enough to
+  justify cleanly instead (very short bullets can justify awkwardly with stretched word
+  gaps).
 
 ## Trimming to two pages
 

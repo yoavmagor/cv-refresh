@@ -18,3 +18,6 @@ __pycache__/
 *.pyc
 .DS_Store
 .venv/
+
+# Dated output folders (personal CV runs)
+[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]/

@@ -13,23 +13,30 @@ Templates:
   mirror   fonts, sizes, colors, margins and heading style detected from the
            user's original CV (style.json); always a single column
   classic  serif (Cambria), centered header, deep-red accent, black headings with a rule
-  modern   sans (Calibri), left header, blue accent, colored headings with a rule
-  compact  sans (Arial), tight margins and spacing, green accent, for dense 2-page CVs
+  modern   sans (Calibri), centered header, blue accent, colored headings with a rule
+  compact  sans (Arial), centered header, tight margins and spacing, green accent,
+           for dense 2-page CVs
 
-Every template gets a colored rule under the header (name/contact block) and under
-each section heading, and the company/institution name on a role or education line
-renders in the accent color -- plain black-on-white was the default before and read
-as flat. Keep these subtle: a CV is still a document a recruiter skims in seconds, not
-a poster. Body text and bullets are justified (even margins on both sides), not just
-left-aligned, for a more typeset look. Inline markup, handled by `add_rich_text` and
-usable in any bullet, summary paragraph, or `extra_sections` "lines" item:
-  - `**term**` renders as bold -- use it in cv.json text for the 1-2 key nouns per
-    bullet (tool, platform, result), not for whole sentences.
+Every template centers the header block and gets a colored rule under it (name/
+contact) and under each section heading; the company/institution name and the date on
+a role or education line render in the accent color too (the date sits right after the
+company, not right-tab-stopped to the far margin -- that wrapped or collided with the
+date when the title/company was long). Keep these subtle: a CV is still a document a
+recruiter skims in seconds, not a poster. Body text and bullets are justified (even
+margins on both sides), not just left-aligned, for a more typeset look.
+
+Inline markup, handled by `add_rich_text` and usable in any bullet, summary paragraph,
+or `extra_sections` "lines" item:
   - a bare URL or `github.com/...` reference is auto-linkified (underlined,
-    accent-colored, clickable).
-Do not hand-format either of these in cv.json text (no manual bold-looking phrasing,
-no markdown link syntax) -- write `**word**` or the plain URL and the renderer does
-the rest.
+    accent-colored, clickable) -- do not hand-format it with markdown link syntax,
+    just write the plain URL.
+  - `**term**` renders as bold. The capability is real, but cv.json text should not
+    use it by default: bolding the "key nouns" of every bullet was tried and reverted
+    after the person reviewing the output called it "a very bad job" -- with the role
+    line's title/company/date already bold and colored, more bold inside the bullets
+    read as cluttered rather than scannable. Leave bullets, summaries and extra_sections
+    text plain; only reach for `**bold**` if the user explicitly asks to emphasize
+    something specific (see references/writing-guide.md).
 
 --autofit only changes typography (spacing, font size, margins) within
 readable limits. If the CV still exceeds --max-pages, the JSON output says so
@@ -53,7 +60,7 @@ try:
     from docx import Document  # type: ignore
     from docx.enum.style import WD_STYLE_TYPE  # type: ignore
     from docx.enum.table import WD_TABLE_ALIGNMENT  # noqa: F401  # type: ignore
-    from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT  # type: ignore
+    from docx.enum.text import WD_ALIGN_PARAGRAPH  # type: ignore
     from docx.opc.constants import RELATIONSHIP_TYPE as RT  # type: ignore
     from docx.oxml import OxmlElement  # type: ignore
     from docx.oxml.ns import qn  # type: ignore
@@ -76,14 +83,14 @@ TEMPLATES = {
         "font_body": "Calibri", "font_heading": "Calibri", "size_body": 10.5, "size_name": 24,
         "size_heading": 12, "accent_color": "1F4E79", "heading_color": "1F4E79",
         "heading_case": "upper", "heading_bold": True, "heading_rule": True, "header_rule": True,
-        "header_alignment": "left",
+        "header_alignment": "center",
         "margins_in": {"top": 0.65, "bottom": 0.65, "left": 0.75, "right": 0.75},
     },
     "compact": {
         "font_body": "Arial", "font_heading": "Arial", "size_body": 9.5, "size_name": 18,
         "size_heading": 10.5, "accent_color": "2E5C4A", "heading_color": "000000",
         "heading_case": "upper", "heading_bold": True, "heading_rule": True, "header_rule": True,
-        "header_alignment": "left",
+        "header_alignment": "center",
         "margins_in": {"top": 0.5, "bottom": 0.5, "left": 0.55, "right": 0.55},
     },
 }
@@ -245,7 +252,6 @@ class Builder:
         m = self.p["margins_in"]
         sec.top_margin, sec.bottom_margin = Inches(m["top"]), Inches(m["bottom"])
         sec.left_margin, sec.right_margin = Inches(m["left"]), Inches(m["right"])
-        self.text_width = sec.page_width - sec.left_margin - sec.right_margin
 
     def _para_style(self, name, size, bold=False, italic=False, color=None, font=None,
                     before=0.0, after=0.0, align=None, keep_next=False):
@@ -274,9 +280,12 @@ class Builder:
         body = p["size_body"]
         align = WD_ALIGN_PARAGRAPH.CENTER if p["header_alignment"] == "center" else WD_ALIGN_PARAGRAPH.LEFT
         self._para_style("Normal", body, color="000000", after=0)
-        self._para_style("CV Name", p["size_name"], bold=True, color=p["accent_color"],
-                         font=p["font_heading"], after=1, align=align)
-        self._para_style("CV Headline", body + 1.5, color="333333", after=2, align=align)
+        name_style = self._para_style("CV Name", p["size_name"], bold=True, color=p["accent_color"],
+                                      font=p["font_heading"], after=1, align=align)
+        name_style.font.all_caps = True
+        headline_style = self._para_style("CV Headline", body + 1.5, bold=True, color="333333",
+                                          after=2, align=align)
+        headline_style.font.all_caps = True
         contact = self._para_style("CV Contact", body - 0.5, color="333333", after=6 * sp, align=align)
         if p.get("header_rule"):
             contact.paragraph_format.space_after = Pt(8 * sp)
@@ -315,14 +324,19 @@ class Builder:
         return self.para("List Bullet", text)
 
     def role_line(self, left_bold, left_rest, right):
+        # Date sits right next to the title/company, not tab-jumped to the far
+        # margin: a long title or company name pushed the old right-aligned tab
+        # stop past the line width, wrapping the date onto its own orphaned line
+        # or overrunning the margin entirely.
         para = self.para("CV Role")
-        para.paragraph_format.tab_stops.add_tab_stop(self.text_width, WD_TAB_ALIGNMENT.RIGHT)
         para.add_run(left_bold).bold = True
         if left_rest:
             run = para.add_run(left_rest)
             run.font.color.rgb = RGBColor.from_string(self.p["accent_color"])
         if right:
-            para.add_run("\t" + right)
+            run = para.add_run("  ·  " + right)
+            run.font.italic = True
+            run.font.color.rgb = RGBColor.from_string("595959")
         return para
 
     # sections --------------------------------------------------------------
